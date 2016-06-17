@@ -1,0 +1,9 @@
+# testing coverage
+coverage
+
+# Example
+Example
+
+# DEV Enviroment
+__tests__
+.travis.yml

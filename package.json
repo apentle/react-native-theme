@@ -1,0 +1,26 @@
+{
+  "name": "react-native-theme",
+  "version": "0.0.1",
+  "description": "Theme manager for react native project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apentle/react-native-theme.git"
+  },
+  "keywords": [
+    "react-native",
+    "theme",
+    "css",
+    "styles",
+    "manager"
+  ],
+  "author": "Doan Nguyen <doannd@apentle.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/apentle/react-native-theme/issues"
+  },
+  "homepage": "https://github.com/apentle/react-native-theme#readme"
+}
