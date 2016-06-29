@@ -5,7 +5,7 @@ node_js:
   - "4.2"
 
 install:
-  - npm install react-native
+  - npm install react react-native jest-cli
   - npm install --only=dev
   - npm install --save-dev coveralls
 
