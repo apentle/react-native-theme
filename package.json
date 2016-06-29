@@ -1,6 +1,6 @@
 {
   "name": "react-native-theme",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Theme manager for react native project",
   "main": "index.js",
   "scripts": {

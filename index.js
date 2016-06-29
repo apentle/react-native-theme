@@ -1,7 +1,7 @@
 'use strict';
 
 import {StyleSheet, Platform} from 'react-native';
-const deepDiffer = require('deepDiffer');
+const deepDiffer = require('./lib/deepDiffer');
 
 var themes = {};
 var proxies = {};
@@ -22,8 +22,19 @@ function styleHasFunction(style) {
   return false;
 }
 
+function platformSpecific(styles) {
+  const result = {};
+  for (var key in styles) {
+    let {ios, android, windows, web, ...style} = {...styles[key]};
+    result[key] = styles[key][Platform.OS] ?
+      {...style, ...styles[key][Platform.OS]} :
+      style;
+  }
+  return result;
+}
+
 // Theme class
-class Theme {
+const Theme = {
   get styles() {
     if (current === 'default') {
       if (themes.hasOwnProperty(current)) {
@@ -39,7 +50,11 @@ class Theme {
       }
     }
     return proxies[current];
-  }
+  },
+
+  get name() {
+    return current;
+  },
 
   add(styles, name = 'default') {
     // Check styles is processed
@@ -49,6 +64,8 @@ class Theme {
         processed = 1;
       } else {
         processed = 0;
+        // Platform Specific
+        styles = platformSpecific(styles);
       }
       break;
     }
@@ -90,7 +107,7 @@ class Theme {
       delete proxies[name];
     }
     return 0;
-  }
+  },
 
   active(name = 'default') {
     if (name !== current && themes.hasOwnProperty(name)) {
@@ -98,16 +115,55 @@ class Theme {
       if (rootComponent !== null) {
         rootComponent.forceUpdate();
       }
+    } else {
+      if (name !== current) {
+        console.warn('You must add theme data before active it.');
+      }
+      console.warn('Activated theme: ' + current);
     }
-  }
+  },
 
   setRoot(root) {
     if (typeof root === 'undefined') {
       rootComponent = null;
     } else if (typeof root === 'object' && root.hasOwnProperty('forceUpdate')) {
       rootComponent = root;
+    } else {
+      console.warn('setRoot: root must be a react native component or undefined');
     }
-  }
-}
+  },
 
-module.exports = new Theme();
+  css(styles) {
+    if (typeof styles === 'string' || Array.isArray(styles)) {
+      if (typeof styles === 'string') {
+        var result = styles.split(' ').map(function(name) {
+          if (name.length !== 0 && Theme.styles.hasOwnProperty(name)) {
+            return Theme.styles[name];
+          }
+          return 0;
+        }).filter(function(style) {
+          return style;
+        });
+      } else {
+        var result = [];
+        for (var i = 0, styleLength = styles.length; i < styleLength; ++i) {
+          var computed = Theme.css(styles[i]);
+          if (Array.isArray(computed)) {
+            Array.prototype.push.apply(result, computed);
+          } else if (computed !== 0) {
+            result.push(computed);
+          }
+        }
+      }
+      if (result.length === 0) {
+        return 0;
+      } else if (result.length === 1) {
+        return result[0];
+      }
+      return result;
+    }
+    return styles;
+  },
+};
+
+module.exports = Theme;
