@@ -4,7 +4,22 @@
   "description": "Theme manager for react native project",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --coverage"
+  },
+  "peerDependencies": {
+    "react-native": "*"
+  },
+  "devDependencies": {
+    "react-native-babel-jest": "^0.x"
+  },
+  "jest": {
+    "scriptPreprocessor": "<rootDir>/node_modules/react-native-babel-jest",
+    "collectCoverageOnlyFrom": {
+      "index.js": true
+    },
+    "testPathIgnorePatterns": [
+      "/node_modules/"
+    ]
   },
   "repository": {
     "type": "git",

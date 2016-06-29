@@ -6,4 +6,5 @@ Example
 
 # DEV Enviroment
 __tests__
+__mocks__
 .travis.yml
