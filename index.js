@@ -126,7 +126,7 @@ const Theme = {
   setRoot(root) {
     if (typeof root === 'undefined') {
       rootComponent = null;
-    } else if (typeof root === 'object' && root.hasOwnProperty('forceUpdate')) {
+    } else if (typeof root === 'object' && typeof root.forceUpdate === 'function') {
       rootComponent = root;
     } else {
       console.warn('setRoot: root must be a react native component or undefined');

@@ -1,5 +1,5 @@
 # react-native-theme
-[![Build Status](https://travis-ci.org/apentle/react-native-theme.svg?branch=master)](https://travis-ci.org/apentle/react-native-theme) [![Coverage Status](https://coveralls.io/repos/github/apentle/react-native-theme/badge.svg?branch=master)](https://coveralls.io/github/apentle/react-native-theme?branch=master)
+[![Build Status](https://travis-ci.org/apentle/react-native-theme.svg?branch=master)](https://travis-ci.org/apentle/react-native-theme) [![Coverage Status](https://coveralls.io/repos/github/apentle/react-native-theme/badge.svg?branch=master)](https://coveralls.io/github/apentle/react-native-theme?branch=master) [![npm version](https://badge.fury.io/js/react-native-theme.svg)](https://badge.fury.io/js/react-native-theme)
 
 Theme manager for react native project!
 
@@ -24,7 +24,7 @@ theme.add({ // Add default theme
   ...
 });
 
-theme.add({
+theme.add({ // Add red theme
   title: {
     fontSize: 20,
     color: 'red',
@@ -43,21 +43,45 @@ import { styles } from 'react-native-theme';
 ...
 ```
 
+## Platform Styles Support
+You can also add specific style for different platforms like this:
+```javascript
+theme.add({
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+    ios: {
+      backgroundColor: 'green',
+    },
+    android: {
+      backgroundColor: 'blue',
+    },
+  },
+});
+```
+
 ## API
-### styles
-Current styles object
 
-### name
-Current name of activated theme
+1. **styles** property
+Get current styles object, matching with current theme.
 
-### add(styles, name = 'default')
-Add styles to a theme
+2. **name** property
+Get current name of activated theme.
 
-### active(name = 'default')
-Active theme
+3. **add(styles, name = 'default')**
+Add styles to a theme. You can add styles many times to a theme as you want!
 
-### setRoot(root)
+4. **active(name = 'default')**
+Active a theme. Theme data must be added before active.
+
+5. **setRoot(root)**
 Set root component for theme. When you active new theme, root component will be rerendered.
 
-### css(styles)
-Mixed convert string, array, object to react native compatible styles
+6. **css(styles)**
+Mixed convert string, array, object to react native compatible styles.
+
+## Demo
+
+![ios Theme Change](https://raw.githubusercontent.com/apentle/react-native-theme-example/master/screenshot.gif)
+
+[See this example](https://github.com/apentle/react-native-theme-example)
