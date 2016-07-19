@@ -1,12 +1,13 @@
 {
   "name": "react-native-theme",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Theme manager for react native project",
   "main": "index.js",
   "scripts": {
     "test": "jest --coverage"
   },
   "peerDependencies": {
+    "react": "*",
     "react-native": "*"
   },
   "devDependencies": {
@@ -15,7 +16,8 @@
   "jest": {
     "scriptPreprocessor": "<rootDir>/node_modules/react-native-babel-jest",
     "collectCoverageOnlyFrom": {
-      "index.js": true
+      "index.js": true,
+      "layout.js": true
     },
     "testPathIgnorePatterns": [
       "/node_modules/"
