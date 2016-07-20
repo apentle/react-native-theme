@@ -6,7 +6,7 @@ node_js:
 
 install:
   - npm install --only=dev
-  - npm install react react-native coveralls
+  - [ -d node_modules/react ] || npm install react react-native
 
 after_script:
   - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js

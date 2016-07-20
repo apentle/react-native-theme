@@ -11,6 +11,7 @@
     "react-native": "*"
   },
   "devDependencies": {
+    "coveralls": "*",
     "jest-cli": "^13.2.3",
     "react-native-babel-jest": "^0.x"
   },
