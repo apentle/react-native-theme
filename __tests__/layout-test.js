@@ -14,10 +14,10 @@ describe('layout', () => {
     // Add modify functions
     layout({
       global: function(o) {
-        if (o.config !== null && o.config.style === 3) {
+        if (o.config && o.config.style === 3) {
           o.children.push('Title');
         }
-        if (o.config !== null && o.config.layoutKey === 'container_content') {
+        if (o.config && o.config.layoutKey === 'container_content') {
           o.children.push(this.content + ' Global');
         } else if (o.config !== null) {
           expect(this).toBeUndefined();
@@ -49,6 +49,7 @@ describe('layout', () => {
       _createRNElement('Text', {layoutKey: 'container_content', layoutContext: {content: 'News'}}, 'Content'),
       _createRNElement('Text', {layoutKey: 'container_empty'}, 'Empty'),
       _createRNElement('Text', null),
+      _createRNElement('Text'),
       _createRNElement('Text', {layoutKey: 'container_footer'}, 'Footer')
     );
     expect(elements).toEqual({
@@ -74,6 +75,10 @@ describe('layout', () => {
         {
           type: 'Text',
           props: null
+        },
+        {
+          type: 'Text',
+          props: undefined
         },
         {
           type: 'Text',

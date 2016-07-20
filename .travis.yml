@@ -5,9 +5,8 @@ node_js:
   - "4.2"
 
 install:
-  - npm install react react-native jest-cli
+  - npm install react react-native coveralls
   - npm install --only=dev
-  - npm install --save-dev coveralls
 
 after_script:
   - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js

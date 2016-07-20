@@ -12,6 +12,7 @@ function addModify(layout, keyPrefix = '') {
     console.warn('Expected argument to be an object.');
     return;
   }
+  
   var layoutKeys = Object.keys(layout);
   for (var i = 0; i < layoutKeys.length; i++) {
     var layoutKey = layoutKeys[i];
@@ -33,7 +34,7 @@ if (typeof global._createRNElement === 'undefined') {
   global._createRNElement = function(type, config, child) {
     // Process children
     var childrenLength = arguments.length - 2;
-    var children = Array(childrenLength);
+    var children = Array(childrenLength > 0 ? childrenLength : 0);
     if (childrenLength === 1) {
       children[0] = child;
     } else if (childrenLength > 1) {
@@ -64,7 +65,7 @@ if (typeof global._createRNElement === 'undefined') {
     applyModify('global');
 
     // Key dependent modifies
-    if (config !== null && config.hasOwnProperty('layoutKey')) {
+    if (config && config.hasOwnProperty('layoutKey')) {
       applyModify(config.layoutKey);
       // Delete config
       delete config.layoutKey;
@@ -77,13 +78,8 @@ if (typeof global._createRNElement === 'undefined') {
       return result.element;
     }
 
-    // Recorrect children
+    // Recorrect config
     config = result.config;
-    if (children.length === 0) {
-      return React.createElement(type, config);
-    } else if (children.length === 1) {
-      return React.createElement(type, config, children[0]);
-    }
     return React.createElement.apply(React, [type, config].concat(children));
   }
 }
