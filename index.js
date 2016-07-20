@@ -5,6 +5,7 @@ const deepDiffer = require('./lib/deepDiffer');
 
 var themes = {};
 var proxies = {};
+var _components = {};
 var current = 'default';
 var rootComponent = null;
 
@@ -44,13 +45,13 @@ function platformSpecific(styles) {
 const Theme = {
   get styles() {
     if (current === 'default') {
-      if (themes.hasOwnProperty(current)) {
+      if (themes[current] !== undefined) {
         return themes.default;
       }
       proxies.default = {};
     }
-    if (!proxies.hasOwnProperty(current)) {
-      if (themes.hasOwnProperty('default')) {
+    if (proxies[current] === undefined) {
+      if (themes.default !== undefined) {
         proxies[current] = {...themes.default, ...themes[current]};
       } else {
         return themes[current];
@@ -80,7 +81,7 @@ const Theme = {
       return 2;
     }
     // Add new theme
-    if (!themes.hasOwnProperty(name)) {
+    if (themes[name] === undefined) {
       themes[name] = processed ? styles : StyleSheet.create(styles);
       return 0;
     }
@@ -88,7 +89,7 @@ const Theme = {
     var theme = themes[name];
     for (var key in styles) {
       var style = styles[key];
-      if (theme.hasOwnProperty(key)) {
+      if (theme[key] !== undefined) {
         var style_obj = StyleSheet.flatten([theme[key], style]);
         if (styleHasFunction(StyleSheet.flatten(style))) {
           theme[key] = StyleSheet.create({
@@ -110,14 +111,14 @@ const Theme = {
       }
     }
     // Clear proxies cache
-    if (name !== 'default' && proxies.hasOwnProperty(name)) {
+    if (name !== 'default' && proxies[name] !== undefined) {
       delete proxies[name];
     }
     return 0;
   },
 
   active(name = 'default') {
-    if (name !== current && themes.hasOwnProperty(name)) {
+    if (name !== current && themes[name] !== undefined) {
       current = name;
       if (rootComponent !== null) {
         rootComponent.forceUpdate();
@@ -144,7 +145,7 @@ const Theme = {
     if (typeof styles === 'string' || Array.isArray(styles)) {
       if (typeof styles === 'string') {
         var result = styles.split(' ').map(function(name) {
-          if (name.length !== 0 && Theme.styles.hasOwnProperty(name)) {
+          if (name.length !== 0 && Theme.styles[name] !== undefined) {
             return Theme.styles[name];
           }
           return 0;
@@ -170,6 +171,38 @@ const Theme = {
       return result;
     }
     return styles;
+  },
+
+  defineComponent(type) {
+    Object.defineProperty(Theme, type, {
+      get: function() {
+        if (_components[current] !== undefined && _components[current][type] !== undefined) {
+          return _components[current][type];
+        }
+        if (current !== 'default' && _components.default !== undefined) {
+          return _components.default[type];
+        }
+        return undefined;
+      }
+    });
+  },
+
+  addComponents(components, name = 'default') {
+    if (typeof components !== 'object') {
+      console.warn('Expected argument to be an object.');
+      return;
+    }
+    if (_components[name] === undefined) {
+      _components[name] = {};
+    }
+    var theme = _components[name];
+
+    var types = Object.keys(components);
+    for (var i = 0; i < types.length; i++) {
+      var type = types[i];
+      theme[type] = components[type];
+      Theme.hasOwnProperty(type) || Theme.defineComponent(type);
+    }
   },
 };
 

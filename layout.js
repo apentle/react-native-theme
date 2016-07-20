@@ -19,10 +19,10 @@ function addModify(layout, keyPrefix = '') {
     var modifies = layout[layoutKey];
     if (typeof modifies === 'function') {
       var key = keyPrefix + layoutKey;
-      if (layouts.hasOwnProperty(key)) {
-        layouts[key].push(modifies);
-      } else {
+      if (layouts[key] === undefined) {
         layouts[key] = [modifies];
+      } else {
+        layouts[key].push(modifies);
       }
     } else if (typeof modifies === 'object') {
       addModify(modifies, keyPrefix + layoutKey + '_');
@@ -53,7 +53,7 @@ if (typeof global._createRNElement === 'undefined') {
     var layoutContext = config && config.layoutContext;
     var params = [result];
     var applyModify = function (key) {
-      if (layouts.hasOwnProperty(key)) {
+      if (layouts[key] !== undefined) {
         var modifies = layouts[key];
         for (var i = 0; i < modifies.length; i++) {
           modifies[i].apply(layoutContext, params);
@@ -65,7 +65,7 @@ if (typeof global._createRNElement === 'undefined') {
     applyModify('global');
 
     // Key dependent modifies
-    if (config && config.hasOwnProperty('layoutKey')) {
+    if (config && config.layoutKey !== undefined) {
       applyModify(config.layoutKey);
       // Delete config
       delete config.layoutKey;

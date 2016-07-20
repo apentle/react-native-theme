@@ -153,4 +153,36 @@ describe('theme', () => {
       [theme_default.container, theme_default.title, theme_default.img, 2, {color: 'red'}]
     );
   });
+
+  it('theme.addComponents(components, name): add components for theme', () => {
+    theme.addComponents(1);
+    var redComponents = {
+      View: {red: 1, View: 1},
+    };
+    theme.addComponents(redComponents, 'red');
+    expect(theme.View).toBeUndefined();
+    theme.active('red');
+    expect(theme.Text).toBeUndefined();
+    theme.active();
+
+    var components = {
+      View: {View: 1},
+      Text: {Text: 1},
+    };
+    theme.addComponents(components);
+    expect(theme.View).toBe(components.View);
+
+    theme.active('red');
+    expect(theme.View).toBe(redComponents.View);
+    expect(theme.Text).toBe(components.Text);
+
+    theme.addComponents({Blue: 1}, 'blue');
+    expect(theme.Blue).toBeUndefined();
+
+    var extraRed = {
+      Button: {red: 1, Button: 1},
+    };
+    theme.addComponents(extraRed, 'red');
+    expect(theme.Button).toBe(extraRed.Button);
+  });
 });

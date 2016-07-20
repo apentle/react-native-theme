@@ -3,6 +3,8 @@
 
 Theme manager for react native project!
 
+![ios Theme Change](https://raw.githubusercontent.com/apentle/react-native-theme-example/master/screenshot1.gif)
+
 ## Installation
 ```bash
 npm i --save react-native-theme
@@ -80,8 +82,12 @@ Set root component for theme. When you active new theme, root component will be 
 6. **css(styles)**
 Mixed convert string, array, object to react native compatible styles.
 
-## Demo
+7. **addComponents(components, name = 'default')**
+Manage theme components to allow updating content while changing the theme. `components` is an object like `{Container: /*Container Component*/}`
 
-![ios Theme Change](https://raw.githubusercontent.com/apentle/react-native-theme-example/master/screenshot.gif)
+8. **Component**
+Get current theme component like `theme.Container` or `import {Container} from 'react-native-theme'`
+
+## Example
 
 [See this example](https://github.com/apentle/react-native-theme-example)
