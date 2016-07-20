@@ -1,6 +1,6 @@
 'use strict';
 
-const React = require('React');
+const React = require('react');
 
 const layouts = {};
 
@@ -12,7 +12,7 @@ function addModify(layout, keyPrefix = '') {
     console.warn('Expected argument to be an object.');
     return;
   }
-  
+
   var layoutKeys = Object.keys(layout);
   for (var i = 0; i < layoutKeys.length; i++) {
     var layoutKey = layoutKeys[i];

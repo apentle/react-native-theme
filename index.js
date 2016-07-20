@@ -25,9 +25,16 @@ function styleHasFunction(style) {
 function platformSpecific(styles) {
   const result = {};
   for (var key in styles) {
-    let {ios, android, windows, web, ...style} = {...styles[key]};
-    result[key] = styles[key][Platform.OS] ?
-      {...style, ...styles[key][Platform.OS]} :
+    var platforms = ['ios', 'android', 'windows', 'web'];
+    var styles_key = styles[key];
+    var style = {};
+    for (var i in styles_key) {
+      if (platforms.indexOf(i) === -1) {
+        style[i] = styles_key[i];
+      }
+    }
+    result[key] = styles_key.hasOwnProperty(Platform.OS) ?
+      {...style, ...styles_key[Platform.OS]} :
       style;
   }
   return result;
@@ -44,7 +51,7 @@ const Theme = {
     }
     if (!proxies.hasOwnProperty(current)) {
       if (themes.hasOwnProperty('default')) {
-        proxies[current] = Object.assign({}, themes.default, themes[current]);
+        proxies[current] = {...themes.default, ...themes[current]};
       } else {
         return themes[current];
       }

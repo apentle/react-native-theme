@@ -6,6 +6,9 @@ const layout = require('../layout');
 describe('layout', () => {
   it('check global function _createRNElement', () => {
     expect(_createRNElement).toBeDefined();
+    var oldFn = _createRNElement;
+    require('../layout');
+    expect(_createRNElement).toBe(oldFn);
   });
 
   it('modify exist layout', () => {
@@ -38,6 +41,7 @@ describe('layout', () => {
         empty: function(o) {
           o.stopRender = true;
         },
+        invalid: 1,
         footer: function(o) {
           o.element = _createRNElement('Text', null, 'New Footer');
         }

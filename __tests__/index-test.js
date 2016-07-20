@@ -55,6 +55,7 @@ const theme_red_extend_obj = {
     color: 'red',
   },
   fn: {
+    nfn: {},
     transform: [function () {}],
   },
 };
@@ -126,10 +127,10 @@ describe('theme', () => {
     theme.setRoot({forceUpdate});
     theme.active('obj');
     expect(forceUpdate.mock.calls.length).toBe(0);
-    
+
     theme.active();
     expect(forceUpdate.mock.calls.length).toBe(1);
-    
+
     theme.setRoot({});
     theme.setRoot();
     theme.active('red');
