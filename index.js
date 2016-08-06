@@ -1,13 +1,13 @@
 'use strict';
 
-import {StyleSheet, Platform} from 'react-native';
-const deepDiffer = require('./lib/deepDiffer');
+const {StyleSheet, Platform} = require('react-native');
+const deepDiffer = require('react-native/lib/deepDiffer');
 
-var themes = {};
-var proxies = {};
+var _themes = {};
+var _proxies = {};
 var _components = {};
-var current = 'default';
-var rootComponent = null;
+var _current = 'default';
+var _rootComponent = null;
 
 // Utilities Functions
 function styleHasFunction(style) {
@@ -41,27 +41,41 @@ function platformSpecific(styles) {
   return result;
 }
 
+function defineComponent(type) {
+  Object.defineProperty(Theme, type, {
+    get: function() {
+      if (_components[_current] !== undefined && _components[_current][type] !== undefined) {
+        return _components[_current][type];
+      }
+      if (_current !== 'default' && _components.default !== undefined) {
+        return _components.default[type];
+      }
+      return undefined;
+    }
+  });
+}
+
 // Theme class
 const Theme = {
   get styles() {
-    if (current === 'default') {
-      if (themes[current] !== undefined) {
-        return themes.default;
+    if (_current === 'default') {
+      if (_themes[_current] !== undefined) {
+        return _themes.default;
       }
-      proxies.default = {};
+      _proxies.default = {};
     }
-    if (proxies[current] === undefined) {
-      if (themes.default !== undefined) {
-        proxies[current] = {...themes.default, ...themes[current]};
+    if (_proxies[_current] === undefined) {
+      if (_themes.default !== undefined) {
+        _proxies[_current] = {..._themes.default, ..._themes[_current]};
       } else {
-        return themes[current];
+        return _themes[_current];
       }
     }
-    return proxies[current];
+    return _proxies[_current];
   },
 
   get name() {
-    return current;
+    return _current;
   },
 
   add(styles, name = 'default') {
@@ -81,12 +95,12 @@ const Theme = {
       return 2;
     }
     // Add new theme
-    if (themes[name] === undefined) {
-      themes[name] = processed ? styles : StyleSheet.create(styles);
+    if (_themes[name] === undefined) {
+      _themes[name] = processed ? styles : StyleSheet.create(styles);
       return 0;
     }
     // Merge theme
-    var theme = themes[name];
+    var theme = _themes[name];
     for (var key in styles) {
       var style = styles[key];
       if (theme[key] !== undefined) {
@@ -111,31 +125,31 @@ const Theme = {
       }
     }
     // Clear proxies cache
-    if (name !== 'default' && proxies[name] !== undefined) {
-      delete proxies[name];
+    if (name !== 'default' && _proxies[name] !== undefined) {
+      delete _proxies[name];
     }
     return 0;
   },
 
   active(name = 'default') {
-    if (name !== current && themes[name] !== undefined) {
-      current = name;
-      if (rootComponent !== null) {
-        rootComponent.forceUpdate();
+    if (name !== _current && _themes[name] !== undefined) {
+      _current = name;
+      if (_rootComponent !== null) {
+        _rootComponent.forceUpdate();
       }
     } else {
-      if (name !== current) {
+      if (name !== _current) {
         console.warn('You must add theme data before active it.');
       }
-      console.warn('Activated theme: ' + current);
+      console.warn('Activated theme: ' + _current);
     }
   },
 
   setRoot(root) {
     if (typeof root === 'undefined') {
-      rootComponent = null;
+      _rootComponent = null;
     } else if (typeof root === 'object' && typeof root.forceUpdate === 'function') {
-      rootComponent = root;
+      _rootComponent = root;
     } else {
       console.warn('setRoot: root must be a react native component or undefined');
     }
@@ -173,20 +187,6 @@ const Theme = {
     return styles;
   },
 
-  defineComponent(type) {
-    Object.defineProperty(Theme, type, {
-      get: function() {
-        if (_components[current] !== undefined && _components[current][type] !== undefined) {
-          return _components[current][type];
-        }
-        if (current !== 'default' && _components.default !== undefined) {
-          return _components.default[type];
-        }
-        return undefined;
-      }
-    });
-  },
-
   addComponents(components, name = 'default') {
     if (typeof components !== 'object') {
       console.warn('Expected argument to be an object.');
@@ -198,10 +198,10 @@ const Theme = {
     var theme = _components[name];
 
     var types = Object.keys(components);
-    for (var i = 0; i < types.length; i++) {
+    for (var i = 0, typesLength = types.length; i < typesLength; i++) {
       var type = types[i];
       theme[type] = components[type];
-      Theme.hasOwnProperty(type) || Theme.defineComponent(type);
+      Theme[type] !== undefined || defineComponent(type);
     }
   },
 };

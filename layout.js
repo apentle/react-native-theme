@@ -14,7 +14,7 @@ function addModify(layout, keyPrefix = '') {
   }
 
   var layoutKeys = Object.keys(layout);
-  for (var i = 0; i < layoutKeys.length; i++) {
+  for (var i = 0, layoutKeysLength = layoutKeys.length; i < layoutKeysLength; i++) {
     var layoutKey = layoutKeys[i];
     var modifies = layout[layoutKey];
     if (typeof modifies === 'function') {
@@ -55,7 +55,7 @@ if (typeof global._createRNElement === 'undefined') {
     var applyModify = function (key) {
       if (layouts[key] !== undefined) {
         var modifies = layouts[key];
-        for (var i = 0; i < modifies.length; i++) {
+        for (var i = 0, modifiesLength = modifies.length; i < modifiesLength; i++) {
           modifies[i].apply(layoutContext, params);
         }
       }
