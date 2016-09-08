@@ -241,4 +241,10 @@ describe('theme', () => {
     theme.addComponents(extraRed, 'red');
     expect(theme.Button).toBe(extraRed.Button);
   });
+
+  it('theme.reset(): reset theme data', () => {
+    theme.active();
+    theme.reset();
+    expect(theme.styles).toEqual({});
+  });
 });

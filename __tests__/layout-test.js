@@ -91,5 +91,6 @@ describe('layout', () => {
         }
       ]
     });
+    layout.reset();
   });
 });

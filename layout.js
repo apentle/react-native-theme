@@ -2,10 +2,15 @@
 
 const React = require('react');
 
-const layouts = {};
+const _layouts = {};
+
 
 /**
- * Add modify function for each layout with key
+ * addModify - allow plugins to modify components
+ *
+ * @param  {object} layout         modifies layout object
+ * @param  {string} keyPrefix = '' prefix key for layout_key to apply
+ * @returns {undefined}
  */
 function addModify(layout, keyPrefix = '') {
   if (typeof layout !== 'object') {
@@ -19,15 +24,22 @@ function addModify(layout, keyPrefix = '') {
     var modifies = layout[layoutKey];
     if (typeof modifies === 'function') {
       var key = keyPrefix + layoutKey;
-      if (layouts[key] === undefined) {
-        layouts[key] = [modifies];
+      if (_layouts[key] === undefined) {
+        _layouts[key] = [modifies];
       } else {
-        layouts[key].push(modifies);
+        _layouts[key].push(modifies);
       }
     } else if (typeof modifies === 'object') {
       addModify(modifies, keyPrefix + layoutKey + '_');
     }
   }
+}
+
+/**
+ * reset - reset layout modifies object
+ */
+addModify.reset = function() {
+  _layouts = {};
 }
 
 if (typeof global._createRNElement === 'undefined') {
@@ -53,8 +65,8 @@ if (typeof global._createRNElement === 'undefined') {
     var layoutContext = config && config.layoutContext;
     var params = [result];
     var applyModify = function (key) {
-      if (layouts[key] !== undefined) {
-        var modifies = layouts[key];
+      var modifies = _layouts[key];
+      if (modifies !== undefined) {
         for (var i = 0, modifiesLength = modifies.length; i < modifiesLength; i++) {
           modifies[i].apply(layoutContext, params);
         }

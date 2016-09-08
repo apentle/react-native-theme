@@ -88,6 +88,9 @@ Manage theme components to allow updating content while changing the theme. `com
 8. **Component**
 Get current theme component like `theme.Container` or `import {Container} from 'react-native-theme'`
 
+9. **reset()**
+Reset all themes data
+
 ## Example
 
 [See this example](https://github.com/apentle/react-native-theme-example)

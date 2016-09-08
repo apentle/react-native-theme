@@ -9,7 +9,12 @@ var _components = {};
 var _current = 'default';
 var _rootComponent = null;
 
-// Utilities Functions
+/**
+ * styleHasFunction - check style object has function
+ *
+ * @param  {object} style object
+ * @returns {boolean}
+ */
 function styleHasFunction(style) {
   for (var key in style) {
     if (typeof style[key] === 'function') {
@@ -23,6 +28,12 @@ function styleHasFunction(style) {
   return false;
 }
 
+/**
+ * platformSpecific - allow platforms specific styles
+ *
+ * @param  {object} styles input styles object
+ * @returns {object}       styles object for a specific platform
+ */
 function platformSpecific(styles) {
   const result = {};
   for (var key in styles) {
@@ -41,6 +52,12 @@ function platformSpecific(styles) {
   return result;
 }
 
+/**
+ * defineComponent - private define theme component
+ *
+ * @param  {object} type component's type
+ * @returns {undefined}
+ */
 function defineComponent(type) {
   Object.defineProperty(Theme, type, {
     get: function() {
@@ -57,9 +74,14 @@ function defineComponent(type) {
 
 // Theme class
 const Theme = {
+  /**
+   * styles - get styles depend on theme
+   *
+   * @returns {object}  StyleSheet object
+   */
   get styles() {
     if (_current === 'default') {
-      if (_themes[_current] !== undefined) {
+      if (_themes.default !== undefined) {
         return _themes.default;
       }
       _proxies.default = {};
@@ -74,10 +96,22 @@ const Theme = {
     return _proxies[_current];
   },
 
+  /**
+   * name - get current theme name
+   *
+   * @returns {string}
+   */
   get name() {
     return _current;
   },
 
+  /**
+   * add - add style for a theme
+   *
+   * @param  {object} styles           styles to add
+   * @param  {string} name = 'default' theme's name
+   * @returns {number}
+   */
   add(styles, name = 'default') {
     // Check styles is processed
     var processed = 2;
@@ -131,6 +165,12 @@ const Theme = {
     return 0;
   },
 
+  /**
+   * active - active a theme by name
+   *
+   * @param  {string} name = 'default' theme's name
+   * @returns {undefined}
+   */
   active(name = 'default') {
     if (name !== _current && _themes[name] !== undefined) {
       _current = name;
@@ -145,6 +185,12 @@ const Theme = {
     }
   },
 
+  /**
+   * setRoot - set a component to be root of theme
+   *
+   * @param  {object} root component
+   * @returns {undefined}
+   */
   setRoot(root) {
     if (typeof root === 'undefined') {
       _rootComponent = null;
@@ -155,6 +201,12 @@ const Theme = {
     }
   },
 
+  /**
+   * css - transform mixed styles in to RN styles object
+   *
+   * @param  {object} styles mixed styles
+   * @returns {object}       react native styles
+   */
   css(styles) {
     if (typeof styles === 'string' || Array.isArray(styles)) {
       if (typeof styles === 'string') {
@@ -187,6 +239,13 @@ const Theme = {
     return styles;
   },
 
+  /**
+   * addComponents - add components to a theme
+   *
+   * @param  {object} components       components object {name: component}
+   * @param  {string} name = 'default' theme's name
+   * @returns {undefined}
+   */
   addComponents(components, name = 'default') {
     if (typeof components !== 'object') {
       console.warn('Expected argument to be an object.');
@@ -203,6 +262,15 @@ const Theme = {
       theme[type] = components[type];
       Theme[type] !== undefined || defineComponent(type);
     }
+  },
+
+  /**
+   * reset - reset themes data
+   */
+  reset() {
+    _themes = {};
+    _proxies = {};
+    _components = {};
   },
 };
 
