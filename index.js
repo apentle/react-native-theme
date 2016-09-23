@@ -62,10 +62,20 @@ function defineComponent(type) {
   Object.defineProperty(Theme, type, {
     get: function() {
       if (_components[_current] !== undefined && _components[_current][type] !== undefined) {
-        return _components[_current][type];
+        var component = _components[_current][type];
+        if (typeof component === 'function') {
+          component = component();
+          _components[_current][type] = component;
+        }
+        return component;
       }
       if (_current !== 'default' && _components.default !== undefined) {
-        return _components.default[type];
+        var component = _components.default[type];
+        if (typeof component === 'function') {
+          component = component();
+          _components.default[type] = component;
+        }
+        return component;
       }
       return undefined;
     }

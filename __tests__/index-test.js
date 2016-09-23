@@ -227,10 +227,17 @@ describe('theme', () => {
     };
     theme.addComponents(components);
     expect(theme.View).toBe(components.View);
+    // Lazy loaded
+    theme.addComponents({
+      LazyView: () => components.View,
+      LazyText: () => components.Text,
+    });
+    expect(theme.LazyView).toBe(components.View);
 
     theme.active('red');
     expect(theme.View).toBe(redComponents.View);
     expect(theme.Text).toBe(components.Text);
+    expect(theme.LazyText).toBe(components.Text);
 
     theme.addComponents({Blue: 1}, 'blue');
     expect(theme.Blue).toBeUndefined();
