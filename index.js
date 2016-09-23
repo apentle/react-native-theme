@@ -63,7 +63,7 @@ function defineComponent(type) {
     get: function() {
       if (_components[_current] !== undefined && _components[_current][type] !== undefined) {
         var component = _components[_current][type];
-        if (typeof component === 'function') {
+        if (typeof component === 'function' && component.prototype.isReactComponent === undefined) {
           component = component();
           _components[_current][type] = component;
         }
@@ -71,7 +71,7 @@ function defineComponent(type) {
       }
       if (_current !== 'default' && _components.default !== undefined) {
         var component = _components.default[type];
-        if (typeof component === 'function') {
+        if (typeof component === 'function' && component.prototype.isReactComponent === undefined) {
           component = component();
           _components.default[type] = component;
         }
