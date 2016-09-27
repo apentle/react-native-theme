@@ -94,3 +94,19 @@ Reset all themes data
 ## Example
 
 [See this example](https://github.com/apentle/react-native-theme-example)
+
+## react-native-web
+This module also works with `react-native-web` by adding package aliases. For example in `webpack`:
+```javascript
+// webpack.config.js
+
+module.exports = {
+  // ...
+  resolve: {
+    alias: {
+      'react-native/lib/deepDiffer': 'react-native-theme/lib/deepDiffer',
+      // ... Other aliases
+    }
+  }
+}
+```
