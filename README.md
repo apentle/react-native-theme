@@ -96,7 +96,7 @@ Reset all themes data
 [See this example](https://github.com/apentle/react-native-theme-example)
 
 ## react-native-web
-This module also works with `react-native-web` by adding package aliases. For example in `webpack`:
+This module also works with [react-native-web](https://github.com/necolas/react-native-web) by adding package aliases. For example in `webpack`:
 ```javascript
 // webpack.config.js
 
@@ -110,3 +110,5 @@ module.exports = {
   }
 }
 ```
+
+Looking for a live web demo? [Go to here.](https://rawgit.com/apentle/react-native-theme-example/master/web/index.html)
