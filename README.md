@@ -113,8 +113,8 @@ Active a theme. Theme data must be added before active.
 Set root component for theme. When you active new theme, root component will be rerendered.
 ```javascript
 componentWillMount() {
-    theme.setRoot(this)
-  }
+  theme.setRoot(this)
+}
 ```
 
 6. **css(styles)**
