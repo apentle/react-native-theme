@@ -140,7 +140,7 @@ const Theme = {
     }
     // Add new theme
     if (_themes[name] === undefined) {
-      _themes[name] = processed ? styles : StyleSheet.create(styles);
+      _themes[name] = processed === 0 ? styles : StyleSheet.create(styles);
       return 0;
     }
     // Merge theme
